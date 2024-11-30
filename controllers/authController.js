@@ -49,3 +49,21 @@ exports.login = catchAsync(async (req, res, next) => {
     token,
   });
 });
+
+exports.protect = catchAsync(async (req, res, next) => {
+  let token;
+
+  if (
+    req.header.authorization &&
+    req.header.authorization.startWith("Beaerer")
+  ) {
+    token = req.header.authorization.split(" ")[1];
+  }
+  if (!token) {
+    next(
+      new AppError("you are not Logged in! Please Log in to get access ", 401)
+    );
+  }
+
+  next();
+});
