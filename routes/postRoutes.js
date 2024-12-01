@@ -4,11 +4,9 @@ const authController = require("./../controllers/authController");
 
 const router = express.Router();
 
-router.use(authController.protect);
-
 router
   .route("/")
-  .post(postController.createPost)
+  .post(authController.protect, postController.createPost)
   .get(postController.getAllPosts);
 
 router

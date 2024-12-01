@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+//const User = require("./../models/userModel");
 
 const postSchema = new mongoose.Schema({
   content: {
@@ -20,6 +21,14 @@ const postSchema = new mongoose.Schema({
     ref: "User",
     default: [],
   },
+});
+
+postSchema.pre(/^find/, function (next) {
+  this.populate({
+    path: "author",
+    select: "-createdAt -updatedAt -__v -role -email",
+  });
+  next();
 });
 
 const Post = mongoose.model("Post", postSchema);
