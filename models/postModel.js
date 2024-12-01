@@ -27,6 +27,9 @@ postSchema.pre(/^find/, function (next) {
   this.populate({
     path: "author",
     select: "-createdAt -updatedAt -__v -role -email",
+  }).populate({
+    path: "likes",
+    select: "-__v ",
   });
   next();
 });

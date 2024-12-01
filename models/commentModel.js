@@ -28,6 +28,16 @@ const commentSchema = new mongoose.Schema(
     toObject: { virtuals: true },
   }
 );
+commentSchema.pre(/^find/, function (next) {
+  this.populate({
+    path: "author",
+    select: "name profilePicture",
+  }).populate({
+    path: "post",
+    select: "content",
+  });
+  next();
+});
 
 const Comment = mongoose.model("Comment", commentSchema);
 
