@@ -1,4 +1,6 @@
 const Notification = require("./../models/notificationModel");
+const mongoose = require("mongoose");
+const { getIO } = require("./../sockets/socket");
 
 // Create Notification
 exports.createNotification = async (req, res) => {
@@ -27,11 +29,10 @@ exports.createNotification = async (req, res) => {
 
 exports.getNotifications = async (req, res) => {
   try {
-    console.log("Fetching notifications for user:", req.user._id);
-    const notifications = await Notification.find({
-      recipient: req.user._id,
-    }).sort("-createdAt");
+    const notifications = await Notification.find();
+
     console.log("Fetched Notifications:", notifications);
+
     res.status(200).json({
       status: "success",
       results: notifications.length,
@@ -66,6 +67,26 @@ exports.markAsRead = async (req, res) => {
     res.status(200).json({
       status: "success",
       data: notification,
+    });
+  } catch (error) {
+    res.status(400).json({
+      status: "error",
+      message: error.message,
+    });
+  }
+};
+
+exports.sendNotification = async (req, res) => {
+  try {
+    const io = getIO();
+    const notification = { message: "New notification!" };
+
+    // Emit to a specific user
+    io.to(req.user.id).emit("notification", notification);
+
+    res.status(200).json({
+      status: "success",
+      message: "Notification sent.",
     });
   } catch (error) {
     res.status(400).json({

@@ -8,7 +8,7 @@ router.use(authController.protect);
 
 // Create Notification
 router.post("/create", notificationController.createNotification);
-
+router.post("/send-notification", notificationController.sendNotification);
 // Get All Notifications for User
 router.get("/", notificationController.getNotifications);
 

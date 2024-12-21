@@ -4,6 +4,9 @@ const postRouter = require("./routes/postRoutes");
 const commentRoutes = require("./routes/commentRoutes");
 const notificationRoutes = require("./routes/notificationRoutes");
 
+
+
+
 const app = express();
 
 app.use(express.json({ limit: "10kb" }));

@@ -34,7 +34,10 @@ const notificationSchema = new mongoose.Schema({
   },
 });
 notificationSchema.pre(/^find/, function (next) {
-  this.populate({ path: "sender", select: "name email" });
+  this.populate({ path: "sender", select: "name email" }).populate({
+    path: "recipient",
+    select: "name email",
+  });
   next();
 });
 
